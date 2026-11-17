@@ -1,3 +1,3 @@
-module github.com/thyagopereira4/bluetooth-device-recovery
+module github.com/thyagopereira/bluetooth-device-recovery
 
 go 1.22
