@@ -1,0 +1,17 @@
+{
+  "policy": {
+    "errors_before_recovery": 3,
+    "error_window_seconds": 45,
+    "cooldown_seconds": 120,
+    "allow_adapter_reset": false,
+    "adapter_reset_path": "/sys/class/bluetooth/hci0/reset",
+    "trigger_patterns": ["start background scanning failed: -16"]
+  },
+  "devices": [
+    {
+      "name": "BT5.0 KB",
+      "address": "AA:BB:CC:DD:EE:FF",
+      "enabled": true
+    }
+  ]
+}

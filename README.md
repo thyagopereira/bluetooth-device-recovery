@@ -1,6 +1,6 @@
 # Bluetooth Device Recovery
 
-Linux watchdog for recovering **only registered Bluetooth devices** when a known adapter failure occurs. It is designed for keyboards and mice that are deliberately switched between hosts: a normal disconnect is ignored, so the watchdog never pulls a device back just because you selected another pairing slot.
+Single-binary Go watchdog for recovering **only registered Bluetooth devices** when a known adapter failure occurs. It is designed for keyboards and mice that are deliberately switched between hosts: a normal disconnect is ignored, so the watchdog never pulls a device back just because you selected another pairing slot.
 
 ## What it does
 
@@ -19,7 +19,7 @@ While the device works, run:
 bt-device-recovery discover
 ```
 
-Copy the relevant generated `[[device]]` block into `/etc/bluetooth-device-recovery/config.toml`. Add another block for each device you want the service to manage, such as a Logitech M720 Triathlon. Never use a display name alone: the Bluetooth address makes the target unambiguous.
+Copy the relevant generated device object into the `devices` list in `/etc/bluetooth-device-recovery/config.json`. Add another object for each device you want the service to manage, such as a Logitech M720 Triathlon. Never use a display name alone: the Bluetooth address makes the target unambiguous.
 
 The M720 must be connected by **Bluetooth** to be managed here. If it is using its Logitech USB receiver, it is not a Bluetooth device and needs a separate USB-receiver watchdog instead.
 
@@ -28,10 +28,10 @@ The M720 must be connected by **Bluetooth** to be managed here. If it is using i
 ## Install
 
 ```bash
-sudo install -d -m 755 /opt/bluetooth-device-recovery
-sudo cp -r bluetooth_recovery main.py /opt/bluetooth-device-recovery/
-sudo install -Dm644 config.example.toml /etc/bluetooth-device-recovery/config.toml
-sudoedit /etc/bluetooth-device-recovery/config.toml
+go build -o bt-device-recovery ./cmd/bt-device-recovery
+sudo install -Dm755 bt-device-recovery /usr/local/bin/bt-device-recovery
+sudo install -Dm644 config.example.json /etc/bluetooth-device-recovery/config.json
+sudoedit /etc/bluetooth-device-recovery/config.json
 sudo install -Dm644 systemd/bluetooth-device-recovery.service /etc/systemd/system/bluetooth-device-recovery.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now bluetooth-device-recovery.service
@@ -47,7 +47,7 @@ journalctl -u bluetooth-device-recovery.service -f
 ## Test
 
 ```bash
-python3 -m pytest -q
+go test ./...
 ```
 
 ## Safety model
