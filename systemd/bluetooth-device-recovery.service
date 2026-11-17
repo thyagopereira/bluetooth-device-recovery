@@ -1,0 +1,13 @@
+[Unit]
+Description=Targeted Bluetooth device recovery watchdog
+After=bluetooth.service
+Wants=bluetooth.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/bluetooth-device-recovery/main.py watch
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
